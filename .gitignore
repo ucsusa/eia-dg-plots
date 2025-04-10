@@ -174,3 +174,5 @@ cython_debug/
 .pypirc
 *.png
 /.virtual_documents
+.snakemake
+data/

@@ -9,38 +9,37 @@ URL: https://raw.githubusercontent.com/samgdotson/2021-dotson-ms/refs/heads/mast
 """
 configfile: "config.yml"
 
-data_url = ("https://raw.githubusercontent.com/"
-            "samgdotson/2021-dotson-ms/refs/heads/"
-            "master/data/uiuc_demand_data.csv")
-
 data_path = "data"
 figure_path = "figures"
 
 rule targets:
     input:
-        plot = f"{figure_path}/my_plot.png",
+        plot = f"{figure_path}/dg_blog_plot.png",
         dag = "dag.png"
 
 rule retrieve_data:
-    output: f"{data_path}/uiuc_demand_data.csv"
-    shell:
-        """
-        wget {data_url} -P {data_path}
-        """
+    output:
+        dg_raw = f"{data_path}/dg_raw.csv", 
+        nm_raw = f"{data_path}/nm_raw.csv", 
+        nnm_raw = f"{data_path}/nnm_raw.csv", 
+        central_raw = f"{data_path}/central_raw.csv", 
+    script: "scripts/retrieve_data.py"
 
 rule process_data:
     input: 
-        data = f"{data_path}/uiuc_demand_data.csv"
+        dg_raw = f"{data_path}/dg_raw.csv", 
+        nm_raw = f"{data_path}/nm_raw.csv", 
+        nnm_raw = f"{data_path}/nnm_raw.csv", 
+        central_raw = f"{data_path}/central_raw.csv", 
     output: 
         processed_data = f"{data_path}/processed_data.csv"
     script: "scripts/process_data.py" 
 
 rule plot_data:
-    input: 
-        data = f"{data_path}/uiuc_demand_data.csv",
+    input:
         processed_data = f"{data_path}/processed_data.csv"
     output: 
-        plot = f"{figure_path}/my_plot.png"
+        plot = f"{figure_path}/dg_blog_plot.png"
     script: "scripts/plot_data.py"
 
 rule build_dag:
