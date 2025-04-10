@@ -1,0 +1,28 @@
+name: snakemake-tutorial
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python<3.12
+  - pip 
+
+  - ipython
+  - ipykernel
+  - jupyterlab
+  - snakemake-minimal>=8.14
+  - graphviz
+
+  - pandas
+  - scipy
+  - numpy
+  - matplotlib
+  - seaborn 
+  - unyt
+  - geopandas
+  
+
+  - pip:
+    - us
+    - census
+    - git+https://github.com/kmax12/gridstatus.git
+    
