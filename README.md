@@ -1,5 +1,7 @@
 # Plot EIA data on distributed and centralized generation capacity
-This code creates a plot for an upcoming UCS blog post showing the comparitive growth of centralized and distributed generation.
+This code creates plots for an upcoming UCS blog series showing 
+ - The comparitive growth of centralized and distributed generation
+ - The growth of distributed generation by technology type
 
 ## Sources
 
@@ -11,7 +13,7 @@ Data is from EIA, collected via the following PUDL data sets:
 
 ## Using
 
-The repo contains both a snamekmake workflow and a Jupyter notebook. The snakemake workflow will only produce the log scale plot; the Jupyter notebook produces additional plots.
+The repo contains both a snamekmake workflow and a Jupyter notebook. The Jupyter notebook produces additional plots.
 
 ## Dependencies
 

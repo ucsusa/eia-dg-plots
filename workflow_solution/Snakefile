@@ -14,7 +14,8 @@ figure_path = "figures"
 
 rule targets:
     input:
-        plot = f"{figure_path}/dg_blog_plot.png",
+        dg_vs_central = f"{figure_path}/dg_vs_central.png",
+        dg_by_type = f"{figure_path}/dg_by_type.png",
         dag = "dag.png"
 
 rule retrieve_data:
@@ -22,7 +23,7 @@ rule retrieve_data:
         dg_raw = f"{data_path}/dg_raw.csv", 
         nm_raw = f"{data_path}/nm_raw.csv", 
         nnm_raw = f"{data_path}/nnm_raw.csv", 
-        central_raw = f"{data_path}/central_raw.csv", 
+        central_raw = f"{data_path}/central_raw.csv",
     script: "scripts/retrieve_data.py"
 
 rule process_data:
@@ -30,16 +31,19 @@ rule process_data:
         dg_raw = f"{data_path}/dg_raw.csv", 
         nm_raw = f"{data_path}/nm_raw.csv", 
         nnm_raw = f"{data_path}/nnm_raw.csv", 
-        central_raw = f"{data_path}/central_raw.csv", 
-    output: 
-        processed_data = f"{data_path}/processed_data.csv"
+        central_raw = f"{data_path}/central_raw.csv",
+    output:
+        combined_data = f"{data_path}/combined_data.csv",
+        distributed_tech_data = f"{data_path}/distributed_tech_data.csv"
     script: "scripts/process_data.py" 
 
 rule plot_data:
     input:
-        processed_data = f"{data_path}/processed_data.csv"
+        combined_data = f"{data_path}/combined_data.csv",
+        distributed_tech_data = f"{data_path}/distributed_tech_data.csv",
     output: 
-        plot = f"{figure_path}/dg_blog_plot.png"
+        dg_vs_central = f"{figure_path}/dg_vs_central.png",
+        dg_by_type = f"{figure_path}/dg_by_type.png"
     script: "scripts/plot_data.py"
 
 rule build_dag:

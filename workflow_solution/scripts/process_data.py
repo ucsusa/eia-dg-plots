@@ -11,8 +11,12 @@ def annual_totals(df, date_field = 'report_date'):
     # Delete empty rows
     df = df.loc[df['capacity_mw'] != 0]
 
-    # Group by 'report_year' and calculate total capacity
-    result = df.groupby('year')['capacity_mw'].sum().reset_index()
+    # Group by 'report_year' and 'tech_class' (if available) and calculate total
+    # capacity
+    if 'tech_class' in df.columns:
+      result = df.groupby(['year', 'tech_class'])['capacity_mw'].sum().reset_index()
+    else:
+      result = df.groupby('year')['capacity_mw'].sum().reset_index()
 
     return result
 
@@ -25,11 +29,14 @@ if __name__ == "__main__":
 
     df_distributed = pd.concat(frames)
 
-    # Group by 'year' and sum the 'capacity' values. This df now has annual online capacity
-    df_distributed = df_distributed.groupby('year', as_index=False)['capacity_mw'].sum()
-
     # Rename capacity
     df_distributed = df_distributed.rename(columns={'capacity_mw': 'dg_capacity_mw'})
+
+    # Group by 'year' and 'tech_class' and sum the 'capacity' values. This df now has annual online capacity by tech
+    df_distributed_tech = df_distributed.groupby(['year', 'tech_class'])['dg_capacity_mw'].sum().reset_index()
+
+    # Group by 'year' and sum the 'capacity' values. This df now has annual online capacity
+    df_distributed = df_distributed.groupby('year', as_index=False)['dg_capacity_mw'].sum()
 
     central_raw = pd.read_csv(snakemake.input.central_raw)
     additions = annual_totals(central_raw, "generator_operating_date")
@@ -43,4 +50,5 @@ if __name__ == "__main__":
     # Combine the two data sets to plot
     df_combined = pd.merge(df_distributed, df_central, on='year', how='outer').fillna(0)
 
-    df_combined.to_csv(snakemake.output.processed_data)
+    df_combined.to_csv(snakemake.output.combined_data)
+    df_distributed_tech.to_csv(snakemake.output.distributed_tech_data)
