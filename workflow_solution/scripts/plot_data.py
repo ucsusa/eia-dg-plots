@@ -11,12 +11,15 @@ if __name__ == "__main__":
 
     # DG vs centralized plot
     start_year = 1900
-    df_plot = df_combined[(df_combined['year'] >= start_year) & (df_combined['year'] <= 2023)]
+    df_plot = df_combined[(df_combined['year'] >= start_year) &
+                          (df_combined['year'] <= 2023)]
 
     with plt.style.context('ucs_light'):
         plt.figure(figsize=(10, 6))    
-        plt.plot(df_plot['year'], df_plot['central_mw'], label='Centralized capacity (MW)')
-        plt.plot(df_plot['year'], df_plot['dg_capacity_mw'], label='Distributed capacity (MW)')
+        plt.plot(df_plot['year'], df_plot['central_mw'],
+                 label='Centralized capacity (MW)')
+        plt.plot(df_plot['year'], df_plot['dg_capacity_mw'],
+                 label='Distributed capacity (MW)')
         plt.xlabel('Year')
         plt.ylabel('Capacity [MW]')
         plt.title(f"Centralized and Distributed Capacity ({start_year}–2023)")
@@ -47,7 +50,8 @@ if __name__ == "__main__":
     }
     df_plot['tech_class'] = df_plot['tech_class'].replace(rename_map)
     df_plot = df_plot.dropna(subset=['tech_class', 'dg_capacity_mw'])
-    df_plot = df_plot.pivot_table(index='year', columns='tech_class', values='dg_capacity_mw', aggfunc='sum')
+    df_plot = df_plot.pivot_table(index='year', columns='tech_class',
+                                  values='dg_capacity_mw', aggfunc='sum')
     df_plot = df_plot.drop(columns=['total'], errors='ignore')
     desired_order = ['Solar', 'Fossil Fuel', 'Storage', 'Other']
     df_plot = df_plot[desired_order]
@@ -55,7 +59,8 @@ if __name__ == "__main__":
     # Plot
     with plt.style.context('ucs_light'):
         ax = df_plot.plot(figsize=(10, 6))
-        ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f'{int(x):,}'))
+        ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x,
+                                                           _: f'{int(x):,}'))
         plt.ylabel('Capacity (MW)')
         plt.xlabel('Year')
         plt.title('Distributed Generation Capacity by Technology (2010-2023)')
@@ -74,23 +79,26 @@ if __name__ == "__main__":
         price_color = "#CB2C30"
 
         # PV cost on the left axis
-        ax1.plot(df_costs["Year"], df_costs["PV_Median_Cost"], color=pv_color, label="Installed PV Cost")
+        ax1.plot(df_costs["Year"], df_costs["PV_Median_Cost"], color=pv_color,
+                 label="Installed PV Cost")
         ax1.set_xlabel("Year")
-        ax1.set_ylabel("PV Median Cost ($/W)", color=pv_color)
+        ax1.set_ylabel("Installed PV Cost ($/W)", color=pv_color)
         ax1.tick_params(axis="y", labelcolor=pv_color)
         ax1.set_ylim(0, 16)
         ax1.grid(True)
 
-        # Set x-axis limits based on the Year column, and ensure it's only integer values
+        # Set x-axis limits based on Year, and ensure it's only integer values
         ax1.set_xlim(df_costs["Year"].min()-1, df_costs["Year"].max()+1)
         ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
 
         # Electric cost on the right axis  
-        ax2.plot(df_costs["Year"], df_costs["Residential_Electricity_Price"], color=price_color, label="Electricity Price")
-        ax2.set_ylabel("Residential Electricity Price (cents/kWh)", color=price_color)
+        ax2.plot(df_costs["Year"], df_costs["Residential_Electricity_Price"],
+                 color=price_color, label="Electricity Price")
+        ax2.set_ylabel("Electricity Price (cents/kWh)", color=price_color)
         ax2.tick_params(axis="y", labelcolor=price_color)
         ax2.set_ylim(0, 16)
 
-        plt.title("Residential Installed PV Cost vs Electricity Price (2001-2023)")
+        plt.title("Residential Installed PV Cost " +
+                  "vs Electricity Price (2001-2023)")
         fig.tight_layout()
         plt.savefig(snakemake.output.pv_vs_elec_cost)

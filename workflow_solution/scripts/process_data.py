@@ -15,7 +15,8 @@ def annual_totals(df, date_field='report_date'):
     # Group by 'report_year' and 'tech_class' (if available) and calculate
     # total capacity
     if 'tech_class' in df.columns:
-        result = df.groupby(['year', 'tech_class'])['capacity_mw'].sum().reset_index()
+        result = df.groupby(['year', 'tech_class'])['capacity_mw']\
+            .sum().reset_index()
     else:
         result = df.groupby('year')['capacity_mw'].sum().reset_index()
 
@@ -26,14 +27,16 @@ if __name__ == "__main__":
 
     # Combine all the dg data
     frames = []
-    for file in [snakemake.input.dg_raw, snakemake.input.nm_raw, snakemake.input.nnm_raw]:
+    for file in [snakemake.input.dg_raw, snakemake.input.nm_raw,
+                 snakemake.input.nnm_raw]:
         df = pd.read_csv(file)
         frames.append(annual_totals(df))
 
     df_distributed = pd.concat(frames)
 
     # Rename capacity
-    df_distributed = df_distributed.rename(columns={'capacity_mw': 'dg_capacity_mw'})
+    df_distributed = df_distributed.rename(columns={'capacity_mw':
+                                                    'dg_capacity_mw'})
 
     # Group by 'year' and 'tech_class' and sum the 'capacity' values. This df
     # now has annual online capacity by tech
