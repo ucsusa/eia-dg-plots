@@ -25,4 +25,6 @@ dependencies:
     - us
     - census
     - git+https://github.com/kmax12/gridstatus.git
+    - "pandas[fss, aws, gcp]"
+    - python-dotenv
     

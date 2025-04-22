@@ -16,6 +16,7 @@ rule targets:
     input:
         dg_vs_central = f"{figure_path}/dg_vs_central.png",
         dg_by_type = f"{figure_path}/dg_by_type.png",
+        pv_vs_elec_cost = f"{figure_path}/pv_vs_elec_cost.png",
         dag = "dag.png"
 
 rule retrieve_data:
@@ -24,6 +25,7 @@ rule retrieve_data:
         nm_raw = f"{data_path}/nm_raw.csv", 
         nnm_raw = f"{data_path}/nnm_raw.csv", 
         central_raw = f"{data_path}/central_raw.csv",
+        res_costs_raw = f"{data_path}/res_costs_raw.csv",
     script: "scripts/retrieve_data.py"
 
 rule process_data:
@@ -32,18 +34,23 @@ rule process_data:
         nm_raw = f"{data_path}/nm_raw.csv", 
         nnm_raw = f"{data_path}/nnm_raw.csv", 
         central_raw = f"{data_path}/central_raw.csv",
+        res_costs_raw = f"{data_path}/res_costs_raw.csv",
+        pv_costs_raw = f"{data_path}/National_Residential_Installed Prices (2000-2023).csv"
     output:
         combined_data = f"{data_path}/combined_data.csv",
-        distributed_tech_data = f"{data_path}/distributed_tech_data.csv"
+        distributed_tech_data = f"{data_path}/distributed_tech_data.csv",
+        costs_data = f"{data_path}/costs_data.csv",
     script: "scripts/process_data.py" 
 
 rule plot_data:
     input:
         combined_data = f"{data_path}/combined_data.csv",
         distributed_tech_data = f"{data_path}/distributed_tech_data.csv",
+        costs_data = f"{data_path}/costs_data.csv",
     output: 
         dg_vs_central = f"{figure_path}/dg_vs_central.png",
-        dg_by_type = f"{figure_path}/dg_by_type.png"
+        dg_by_type = f"{figure_path}/dg_by_type.png",
+        pv_vs_elec_cost = f"{figure_path}/pv_vs_elec_cost.png",
     script: "scripts/plot_data.py"
 
 rule build_dag:
