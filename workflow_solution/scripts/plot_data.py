@@ -15,7 +15,14 @@ if __name__ == "__main__":
                           (df_combined['year'] <= 2023)]
 
     with plt.style.context('ucs_light'):
-        plt.figure(figsize=(10, 6))    
+        plt.rcParams.update({
+            'font.size': 18,          # sets the default font size
+            'axes.titlesize': 20,     # title font size
+            'axes.labelsize': 18,     # x and y label size
+            'xtick.labelsize': 16,    # x tick labels
+            'ytick.labelsize': 16     # y tick labels
+        })
+        plt.figure(figsize=(15, 9), dpi=100)    
         plt.plot(df_plot['year'], df_plot['central_mw'],
                  label='Centralized capacity (MW)')
         plt.plot(df_plot['year'], df_plot['dg_capacity_mw'],
@@ -58,7 +65,14 @@ if __name__ == "__main__":
 
     # Plot
     with plt.style.context('ucs_light'):
-        ax = df_plot.plot(figsize=(10, 6))
+        plt.rcParams.update({
+            'font.size': 18,          # sets the default font size
+            'axes.titlesize': 20,     # title font size
+            'axes.labelsize': 18,     # x and y label size
+            'xtick.labelsize': 16,    # x tick labels
+            'ytick.labelsize': 16     # y tick labels
+        })
+        ax = df_plot.plot(figsize=(15, 9))
         ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x,
                                                            _: f'{int(x):,}'))
         plt.ylabel('Capacity (MW)')
@@ -67,11 +81,18 @@ if __name__ == "__main__":
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
-        plt.savefig(snakemake.output.dg_by_type)
+        plt.savefig(snakemake.output.dg_by_type, dpi=100)
 
     # Costs plot
     with plt.style.context('ucs_light'):
-        fig, ax1 = plt.subplots(figsize=(10, 6))
+        plt.rcParams.update({
+            'font.size': 18,          # sets the default font size
+            'axes.titlesize': 20,     # title font size
+            'axes.labelsize': 18,     # x and y label size
+            'xtick.labelsize': 16,    # x tick labels
+            'ytick.labelsize': 16     # y tick labels
+        })
+        fig, ax1 = plt.subplots(figsize=(15, 9))
         ax2 = ax1.twinx()
 
         # Define colors
@@ -101,4 +122,4 @@ if __name__ == "__main__":
         plt.title("Residential Installed PV Cost " +
                   "vs Electricity Price (2001-2023)")
         fig.tight_layout()
-        plt.savefig(snakemake.output.pv_vs_elec_cost)
+        plt.savefig(snakemake.output.pv_vs_elec_cost, dpi=100)

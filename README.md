@@ -20,12 +20,12 @@ EIA, collected via API:
 LBNLs "Tracking the Sun" data is only available programmatically in a raw format in a datalake. To run this code, a subsest of the data must be downloaded manually:
 1. Go to the [Tracking the Sun shiny app](https://emp-lbnl.shinyapps.io/tts_visualization/)
 2. Go to the tab "Installed Prices"
-3. Downbload the csv file for the first graph, "Installed Prices"
+3. Download the csv file for the first graph, "Installed Prices"
 4. Save the csv to the directory `<path-to-repo>/workflow_solution/data/National_Residential_Installed Prices (2000-2023).csv`
 
 ## Using
 
-The repo contains both a snamekmake workflow and Jupyter notebooks. The Jupyter notebooks produces additional plots.
+The repo contains both a snakemake workflow and Jupyter notebooks. The Jupyter notebooks produce additional plots.
 
 ## Dependencies
 
